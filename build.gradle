@@ -16,7 +16,15 @@ apply plugin: 'io.spring.dependency-management'
 bootJar {
     baseName = 'reporting-service'
     version =  '0.1.0'
+    mainClassName = 'report.service.v3.Application'
 }
+
+springBoot {
+    mainClassName = 'report.service.v3.Application'
+}
+
+group = 'com.report.api.v3'
+version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
