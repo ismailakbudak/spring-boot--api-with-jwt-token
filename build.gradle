@@ -34,8 +34,18 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile("com.h2database:h2:1.4.191")
+    compile('javax.xml.bind:jaxb-api:2.3.0')
+    compile("org.springframework.boot:spring-boot-starter-security")
+    testCompile 'org.springframework.security:spring-security-test'
+    compile("com.auth0:java-jwt:3.4.0")
+
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
     testCompile('com.jayway.jsonpath:json-path')
 }
 

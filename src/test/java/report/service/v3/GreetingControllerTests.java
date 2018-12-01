@@ -27,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import report.service.v3.service.TokenAuthenticationService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -51,4 +52,23 @@ public class GreetingControllerTests {
                 .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
     }
 
+    @Test
+    public void noUserGreetingAuthShouldReturnForbidden() throws Exception {
+
+        this.mockMvc.perform(get("/greeting_auth")).andDo(print()).andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.message").value("Token is required"))
+                .andExpect(jsonPath("$.status").value("DECLINED"));
+    }
+
+    @Test
+    public void withUserGreetingAuthShouldReturnDefaultMessage() throws Exception {
+
+        String token = TokenAuthenticationService.createToken("john");
+
+        this.mockMvc.perform(get("/greeting_auth").header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value("Hello, World!"));
+    }
 }
