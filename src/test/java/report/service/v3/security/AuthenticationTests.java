@@ -1,7 +1,5 @@
-package report.service.v3;
+package report.service.v3.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import report.service.v3.helper.LoginRequest;
-import report.service.v3.service.UserDetailsServiceImpl;
+import report.service.v3.util.JsonMapperUtil;
+import report.service.v3.security.service.UserDetailsServiceImpl;
 
 import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,7 +50,7 @@ public class AuthenticationTests {
     @Test
     public void successfulAuthentication() throws Exception {
 
-        LoginRequest request = new LoginRequest("user@report.com", "password");
+        LoginTestRequest request = new LoginTestRequest("user@report.com", "password");
         User user = new User("user@report.com", ENCRYPTED_PASSWORD, emptyList());
 
         when(this.userDetailsServiceImpl.loadUserByUsername(any())).thenReturn(user);
@@ -63,22 +61,22 @@ public class AuthenticationTests {
     @Test
     public void unsuccessfulAuthenticationWithInvalidEmail() throws Exception {
 
-        LoginRequest request = new LoginRequest("user@report.com", "password");
+        LoginTestRequest request = new LoginTestRequest("user@report.com", "password");
 
         when(this.userDetailsServiceImpl.loadUserByUsername(any())).thenReturn(null);
 
-        failureExpect(convertContent(request));
+        failureExpect(JsonMapperUtil.convert(request));
     }
 
     @Test
     public void unsuccessfulAuthenticationWithInvalidPassword() throws Exception {
 
-        LoginRequest request = new LoginRequest("user@report.com", "password");
+        LoginTestRequest request = new LoginTestRequest("user@report.com", "password");
         User user = new User("user@report.com", "invalid_pass", emptyList());
 
         when(this.userDetailsServiceImpl.loadUserByUsername(any())).thenReturn(user);
 
-        failureExpect(convertContent(request));
+        failureExpect(JsonMapperUtil.convert(request));
     }
 
     @Test
@@ -86,10 +84,10 @@ public class AuthenticationTests {
         failureExpect("");
     }
 
-    private void successExpect(LoginRequest request) throws Exception {
+    private void successExpect(LoginTestRequest request) throws Exception {
         this.mockMvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertContent(request)))
+                .content(JsonMapperUtil.convert(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
                 .andExpect(jsonPath("$.status").value("APPROVED"));
@@ -104,10 +102,6 @@ public class AuthenticationTests {
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.message").value("Error: Merchant ApplicationUser credentials is not valid"))
                 .andExpect(jsonPath("$.status").value("DECLINED"));
-    }
-
-    private String convertContent(LoginRequest request) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(request);
     }
 }
 

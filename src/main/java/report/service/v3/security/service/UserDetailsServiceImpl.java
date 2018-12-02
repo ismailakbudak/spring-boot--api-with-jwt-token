@@ -1,7 +1,7 @@
-package report.service.v3.service;
+package report.service.v3.security.service;
 
-import report.service.v3.entity.ApplicationUser;
-import report.service.v3.repository.ApplicationUserRepository;
+import report.service.v3.model.security.ApplicationUser;
+import report.service.v3.security.repository.ApplicationUserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,15 +12,15 @@ import static java.util.Collections.emptyList;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private ApplicationUserRepository applicationApplicationUserRepository;
+    private ApplicationUserRepository applicationUserRepository;
 
-    public UserDetailsServiceImpl(ApplicationUserRepository applicationApplicationUserRepository) {
-        this.applicationApplicationUserRepository = applicationApplicationUserRepository;
+    public UserDetailsServiceImpl(ApplicationUserRepository applicationUserRepository) {
+        this.applicationUserRepository = applicationUserRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = applicationApplicationUserRepository.findByEmail(email);
+        ApplicationUser applicationUser = applicationUserRepository.findByEmail(email);
         if (applicationUser == null) {
             throw new UsernameNotFoundException(email);
         }

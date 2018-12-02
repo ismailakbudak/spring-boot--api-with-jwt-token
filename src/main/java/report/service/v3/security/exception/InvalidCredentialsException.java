@@ -1,4 +1,4 @@
-package report.service.v3.exception;
+package report.service.v3.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

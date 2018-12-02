@@ -1,4 +1,4 @@
-package report.service.v3.response;
+package report.service.v3.security.response;
 
 public class JWTSuccessResponse {
 

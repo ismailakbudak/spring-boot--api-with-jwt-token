@@ -1,16 +1,10 @@
-package report.service.v3.helper;
+package report.service.v3.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ConvertToJSON {
-    private Object object;
-
-    public ConvertToJSON(Object object) {
-        this.object = object;
-    }
-
-    public String convert() throws JsonProcessingException {
+public class JsonMapperUtil {
+    public static String convert(Object object) throws JsonProcessingException {
         if (object == null) {
             return null;
         }

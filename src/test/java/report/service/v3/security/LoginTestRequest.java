@@ -1,13 +1,11 @@
-package report.service.v3.helper;
+package report.service.v3.security;
 
-import java.io.Serializable;
-
-public class LoginRequest implements Serializable {
+public class LoginTestRequest {
 
     private String email;
     private String password;
 
-    public LoginRequest(String email, String password) {
+    public LoginTestRequest(String email, String password) {
         this.setEmail(email);
         this.setPassword(password);
     }

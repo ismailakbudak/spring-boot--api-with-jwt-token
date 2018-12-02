@@ -1,4 +1,4 @@
-package report.service.v3.entity;
+package report.service.v3.model.security;
 
 import javax.persistence.*;
 

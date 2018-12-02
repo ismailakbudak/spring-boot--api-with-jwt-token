@@ -1,6 +1,6 @@
-package report.service.v3.repository;
+package report.service.v3.security.repository;
 
-import report.service.v3.entity.ApplicationUser;
+import report.service.v3.model.security.ApplicationUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, Long> {

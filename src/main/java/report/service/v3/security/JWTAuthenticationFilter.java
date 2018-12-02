@@ -8,12 +8,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import report.service.v3.entity.ApplicationUser;
-import report.service.v3.exception.InvalidCredentialsException;
-import report.service.v3.helper.ConvertToJSON;
+import report.service.v3.model.security.ApplicationUser;
+import report.service.v3.security.exception.InvalidCredentialsException;
+import report.service.v3.util.JsonMapperUtil;
 import report.service.v3.response.ErrorResponse;
-import report.service.v3.response.JWTSuccessResponse;
-import report.service.v3.service.TokenAuthenticationService;
+import report.service.v3.security.response.JWTSuccessResponse;
+import report.service.v3.security.service.TokenAuthenticationService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -54,8 +54,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication auth) throws IOException, ServletException {
 
         String token =  TokenAuthenticationService.createToken(((User) auth.getPrincipal()).getUsername());
-        ConvertToJSON converter = new ConvertToJSON(new JWTSuccessResponse(token));
-        res.getWriter().write(converter.convert());
+        res.getWriter().write(JsonMapperUtil.convert(new JWTSuccessResponse(token)));
     }
 
     @Override
@@ -65,7 +64,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ErrorResponse errorResponse = new ErrorResponse("Error: Merchant ApplicationUser credentials is not valid");
         res.setStatus(HttpStatus.FORBIDDEN.value());
-        ConvertToJSON converter = new ConvertToJSON(errorResponse);
-        res.getWriter().write(converter.convert());
+        res.getWriter().write(JsonMapperUtil.convert(errorResponse));
     }
 }
