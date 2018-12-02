@@ -3,8 +3,8 @@ package report.service.v3.model.security;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
-public class ApplicationUser {
+@Table(name = "merchants")
+public class Merchant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -15,6 +15,9 @@ public class ApplicationUser {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "name")
+    private String name;
 
     public long getId() {
         return id;
@@ -34,5 +37,13 @@ public class ApplicationUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

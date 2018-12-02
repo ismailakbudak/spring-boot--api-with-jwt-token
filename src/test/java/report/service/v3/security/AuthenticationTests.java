@@ -32,6 +32,7 @@ public class AuthenticationTests {
 
     private static final String ENCRYPTED_PASSWORD = "$2a$10$e5gfGVzxUQnYebHcFoDwgO0PCPZ2xrVqfjxpDJ6gpBUo3pvPsqtxC";
     private MockMvc mockMvc;
+    private LoginTestRequest request;
 
     @Autowired
     private WebApplicationContext context;
@@ -45,38 +46,35 @@ public class AuthenticationTests {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+        this.request = new LoginTestRequest("merchant@test.com", "password");
     }
 
     @Test
     public void successfulAuthentication() throws Exception {
 
-        LoginTestRequest request = new LoginTestRequest("user@report.com", "password");
-        User user = new User("user@report.com", ENCRYPTED_PASSWORD, emptyList());
+        User user = new User("merchant@test.com", ENCRYPTED_PASSWORD, emptyList());
 
         when(this.userDetailsServiceImpl.loadUserByUsername(any())).thenReturn(user);
 
-        successExpect(request);
+        successExpect(JsonMapperUtil.convert(this.request));
     }
 
     @Test
-    public void unsuccessfulAuthenticationWithInvalidEmail() throws Exception {
-
-        LoginTestRequest request = new LoginTestRequest("user@report.com", "password");
+    public void unsuccessfulAuthenticationWithNullUser() throws Exception {
 
         when(this.userDetailsServiceImpl.loadUserByUsername(any())).thenReturn(null);
 
-        failureExpect(JsonMapperUtil.convert(request));
+        failureExpect(JsonMapperUtil.convert(this.request));
     }
 
     @Test
     public void unsuccessfulAuthenticationWithInvalidPassword() throws Exception {
 
-        LoginTestRequest request = new LoginTestRequest("user@report.com", "password");
-        User user = new User("user@report.com", "invalid_pass", emptyList());
+        User user = new User("merchant@test.com", "invalid_pass", emptyList());
 
         when(this.userDetailsServiceImpl.loadUserByUsername(any())).thenReturn(user);
 
-        failureExpect(JsonMapperUtil.convert(request));
+        failureExpect(JsonMapperUtil.convert(this.request));
     }
 
     @Test
@@ -84,10 +82,10 @@ public class AuthenticationTests {
         failureExpect("");
     }
 
-    private void successExpect(LoginTestRequest request) throws Exception {
+    private void successExpect(String content) throws Exception {
         this.mockMvc.perform(post(LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonMapperUtil.convert(request)))
+                .content(content))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
                 .andExpect(jsonPath("$.status").value("APPROVED"));
@@ -100,7 +98,7 @@ public class AuthenticationTests {
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.token").doesNotExist())
                 .andExpect(jsonPath("$.code").value(0))
-                .andExpect(jsonPath("$.message").value("Error: Merchant ApplicationUser credentials is not valid"))
+                .andExpect(jsonPath("$.message").value("Error: Merchant Merchant credentials is not valid"))
                 .andExpect(jsonPath("$.status").value("DECLINED"));
     }
 }

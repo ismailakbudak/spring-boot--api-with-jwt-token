@@ -27,7 +27,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import report.service.v3.security.service.TokenAuthenticationService;
+import report.service.v3.security.TokenAuthenticationUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -64,7 +64,7 @@ public class GreetingControllerTests {
     @Test
     public void withUserGreetingAuthShouldReturnDefaultMessage() throws Exception {
 
-        String token = TokenAuthenticationService.createToken("john");
+        String token = TokenAuthenticationUtil.createToken("john");
 
         this.mockMvc.perform(get("/greeting_auth").header("Authorization", token))
                 .andDo(print())

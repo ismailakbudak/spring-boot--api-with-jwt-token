@@ -1,7 +1,7 @@
 package report.service.v3.security.service;
 
-import report.service.v3.model.security.ApplicationUser;
-import report.service.v3.security.repository.ApplicationUserRepository;
+import report.service.v3.model.security.Merchant;
+import report.service.v3.security.repository.MerchantRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,18 +12,18 @@ import static java.util.Collections.emptyList;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private ApplicationUserRepository applicationUserRepository;
+    private MerchantRepository merchantRepository;
 
-    public UserDetailsServiceImpl(ApplicationUserRepository applicationUserRepository) {
-        this.applicationUserRepository = applicationUserRepository;
+    public UserDetailsServiceImpl(MerchantRepository merchantRepository) {
+        this.merchantRepository = merchantRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = applicationUserRepository.findByEmail(email);
-        if (applicationUser == null) {
+        Merchant merchant = merchantRepository.findByEmail(email);
+        if (merchant == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new User(applicationUser.getEmail(), applicationUser.getPassword(), emptyList());
+        return new User(merchant.getEmail(), merchant.getPassword(), emptyList());
     }
 }
