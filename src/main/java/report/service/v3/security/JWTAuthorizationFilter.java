@@ -36,7 +36,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 return;
             }
             logger.error("token is required");
-            throw new JWTTokenMissingException("Token is required");
+            throw new JWTTokenMissingException(AUTH_REQUIRED_MESSAGE);
         }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);

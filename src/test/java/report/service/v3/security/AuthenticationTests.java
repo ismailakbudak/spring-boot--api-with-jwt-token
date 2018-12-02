@@ -23,6 +23,9 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static report.service.v3.constants.ResponseConstants.APPROVED;
+import static report.service.v3.constants.ResponseConstants.DECLINED;
+import static report.service.v3.security.SecurityConstants.LOGIN_FAIL_MESSAGE;
 import static report.service.v3.security.SecurityConstants.LOGIN_PATH;
 
 @RunWith(SpringRunner.class)
@@ -88,7 +91,7 @@ public class AuthenticationTests {
                 .content(content))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.status").value("APPROVED"));
+                .andExpect(jsonPath("$.status").value(APPROVED));
     }
 
     private void failureExpect(String content) throws Exception {
@@ -98,8 +101,8 @@ public class AuthenticationTests {
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.token").doesNotExist())
                 .andExpect(jsonPath("$.code").value(0))
-                .andExpect(jsonPath("$.message").value("Error: Merchant Merchant credentials is not valid"))
-                .andExpect(jsonPath("$.status").value("DECLINED"));
+                .andExpect(jsonPath("$.message").value(LOGIN_FAIL_MESSAGE))
+                .andExpect(jsonPath("$.status").value(DECLINED));
     }
 }
 

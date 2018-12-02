@@ -1,5 +1,7 @@
 package report.service.v3.security.response;
 
+import static report.service.v3.constants.ResponseConstants.APPROVED;
+
 public class JWTSuccessResponse {
 
     private String token;
@@ -7,7 +9,7 @@ public class JWTSuccessResponse {
 
     public JWTSuccessResponse(String token) {
         this.token = token;
-        this.status = "APPROVED";
+        this.status = APPROVED;
     }
 
     public String getStatus() {

@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static report.service.v3.security.SecurityConstants.LOGIN_FAIL_MESSAGE;
+
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
@@ -61,7 +63,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                               HttpServletResponse res,
                                               AuthenticationException failed) throws IOException, ServletException {
 
-        ErrorResponse errorResponse = new ErrorResponse("Error: Merchant Merchant credentials is not valid");
+        ErrorResponse errorResponse = new ErrorResponse(LOGIN_FAIL_MESSAGE);
         res.setStatus(HttpStatus.FORBIDDEN.value());
         res.getWriter().write(JsonMapperUtil.convert(errorResponse));
     }

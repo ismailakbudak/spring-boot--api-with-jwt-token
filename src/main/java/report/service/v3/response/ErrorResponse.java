@@ -1,5 +1,8 @@
 package report.service.v3.response;
 
+import static report.service.v3.constants.ResponseConstants.DECLINED;
+import static report.service.v3.constants.ResponseConstants.DECLINED_CODE;
+
 public class ErrorResponse {
 
     private Integer code;
@@ -7,9 +10,9 @@ public class ErrorResponse {
     private String status;
 
     public ErrorResponse(String message) {
-        this.code = 0;
+        this.code = DECLINED_CODE;
         this.message = message;
-        this.status = "DECLINED";
+        this.status = DECLINED;
     }
 
     public Integer getCode() {

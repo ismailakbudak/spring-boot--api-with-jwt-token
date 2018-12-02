@@ -19,6 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static report.service.v3.constants.ResponseConstants.DECLINED;
+import static report.service.v3.security.SecurityConstants.AUTH_REQUIRED_MESSAGE;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,8 +59,8 @@ public class GreetingControllerTests {
 
         this.mockMvc.perform(get("/greeting_auth")).andDo(print()).andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value(0))
-                .andExpect(jsonPath("$.message").value("Token is required"))
-                .andExpect(jsonPath("$.status").value("DECLINED"));
+                .andExpect(jsonPath("$.message").value(AUTH_REQUIRED_MESSAGE))
+                .andExpect(jsonPath("$.status").value(DECLINED));
     }
 
     @Test
