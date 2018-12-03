@@ -28,14 +28,14 @@ CREATE TABLE agent_infos (
   customerUserAgent varchar(255),
   merchantIp varchar(255),
   merchantUserAgent varchar(255),
-  createdAt TIMESTAMP NOT NULL,
+  createdAt DATETIME NOT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE ipn_transactions (
   id INT NOT NULL AUTO_INCREMENT,
-  ipnSent BINARY NOT NULL DEFAULT 1,
-  ipnReceived BINARY NOT NULL DEFAULT 1,
+  ipnSent BOOLEAN NOT NULL DEFAULT 1,
+  ipnReceived BOOLEAN NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 
@@ -49,7 +49,7 @@ CREATE TABLE customer_infos (
   startYear varchar(255),
   issueNumber varchar(255),
   email varchar(255) NOT NULL,
-  birthday TIMESTAMP,
+  birthday DATETIME,
   gender varchar(255),
   billingTitle varchar(255),
   billingFirstName varchar(255),
@@ -76,8 +76,8 @@ CREATE TABLE customer_infos (
   shippingPhone varchar(255),
   shippingFax varchar(255),
   token varchar(255),
-  createdAt TIMESTAMP NOT NULL,
-  updatedAt TIMESTAMP,
+  createdAt DATETIME NOT NULL,
+  updatedAt DATETIME,
   PRIMARY KEY (id)
 );
 
@@ -96,16 +96,16 @@ CREATE TABLE transactions (
   type varchar(255) NOT NULL,
   operation varchar(255) NOT NULL,
   message varchar(255) NOT NULL,
-  refundable BINARY NOT NULL DEFAULT 1,
-  ipnTransactionId INT NOT NULL,
-  fxTransactionId INT NOT NULL,
-  merchantId INT NOT NULL,
-  customerInfoId INT NOT NULL,
-  agentInfoId INT NOT NULL,
-  acquirerTransactionId INT NOT NULL,
-  createdAt TIMESTAMP NOT NULL,
-  updatedAt TIMESTAMP NOT NULL,
-  deletedAt TIMESTAMP,
+  refundable BOOLEAN NOT NULL DEFAULT 1,
+  ipnTransactionId INT,
+  fxTransactionId INT,
+  merchantId INT,
+  customerInfoId INT,
+  agentInfoId INT,
+  acquirerTransactionId INT,
+  createdAt DATETIME,
+  updatedAt DATETIME,
+  deletedAt DATETIME,
   PRIMARY KEY (id),
   CONSTRAINT transactions UNIQUE (transactionId)
 );
