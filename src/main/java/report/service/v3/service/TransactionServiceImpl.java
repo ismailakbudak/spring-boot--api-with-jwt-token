@@ -11,7 +11,6 @@ import report.service.v3.model.Transaction;
 import report.service.v3.repository.TransactionRepository;
 import report.service.v3.request.TransactionListRequest;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,8 +23,6 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private TransactionRepository repository;
-
-    EntityManager em;
 
     private Page<Transaction> page;
 

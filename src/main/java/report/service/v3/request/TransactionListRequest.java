@@ -1,7 +1,8 @@
 package report.service.v3.request;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import report.service.v3.exception.InvalidDateFormatException;
+import report.service.v3.util.DateUtil;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -11,26 +12,13 @@ public class TransactionListRequest {
     private Date endDate;
     private static final Integer DEFAULT_PAGE = 1;
 
-    public TransactionListRequest(Map<String, Object> payload){
+    public TransactionListRequest(Map<String, Object> payload) throws InvalidDateFormatException {
         if(payload != null) {
             this.setPage((int) payload.getOrDefault("page", DEFAULT_PAGE));
-            this.setFromDate(dateParse(payload.get("fromDate")));
-            this.setEndDate(dateParse(payload.get("endDate")));
+            this.setFromDate(DateUtil.parse(payload.get("fromDate")));
+            this.setEndDate(DateUtil.parse(payload.get("endDate")));
         } else {
             this.setPage(DEFAULT_PAGE);
-        }
-    }
-
-    private Date dateParse(Object date) {
-        if(date == null)
-            return null;
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return format.parse(date.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
