@@ -41,14 +41,12 @@ public class GreetingControllerTests {
 
     @Test
     public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
-
         this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Hello, World!"));
     }
 
     @Test
     public void paramGreetingShouldReturnTailoredMessage() throws Exception {
-
         this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
@@ -56,7 +54,6 @@ public class GreetingControllerTests {
 
     @Test
     public void noUserGreetingAuthShouldReturnForbidden() throws Exception {
-
         this.mockMvc.perform(get("/greeting_auth")).andDo(print()).andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.message").value(AUTH_REQUIRED_MESSAGE))
@@ -65,7 +62,6 @@ public class GreetingControllerTests {
 
     @Test
     public void withUserGreetingAuthShouldReturnDefaultMessage() throws Exception {
-
         String token = TokenAuthenticationUtil.createToken("john");
 
         this.mockMvc.perform(get("/greeting_auth").header("Authorization", token))

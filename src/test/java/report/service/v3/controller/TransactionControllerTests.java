@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static report.service.v3.constants.ResponseConstants.DECLINED;
+import static report.service.v3.constants.ResponseConstants.DECLINED_CODE;
 import static report.service.v3.security.SecurityConstants.AUTH_REQUIRED_MESSAGE;
 import static org.hamcrest.Matchers.*;
 
@@ -56,7 +57,6 @@ public class TransactionControllerTests {
 
     @Test
     public void noUserGetTransactionsShouldReturnForbidden() throws Exception {
-
         this.mockMvc.perform(get("/api/v3/transaction/list")).andDo(print()).andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.message").value(AUTH_REQUIRED_MESSAGE))
@@ -66,7 +66,6 @@ public class TransactionControllerTests {
 
     @Test
     public void withUserGetTransactionsShouldReturnDefaultListForEmpty() throws Exception {
-
         this.mockMvc.perform(post("/api/v3/transaction/list")
                 .header("Authorization", this.token)
                 .content(""))
@@ -76,7 +75,6 @@ public class TransactionControllerTests {
 
     @Test
     public void withUserGetTransactionsShouldReturnDefaultListForEmptyJson() throws Exception {
-
         this.mockMvc.perform(post("/api/v3/transaction/list")
                 .header("Authorization", this.token)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +94,6 @@ public class TransactionControllerTests {
 
     @Test
     public void withUserGetTransactionsShouldReturnSecondPageList() throws Exception {
-
         Map<String, Object> temp = new HashMap<String, Object>(){{
             put("page", 2);
         }};
@@ -114,6 +111,23 @@ public class TransactionControllerTests {
                 .andExpect(jsonPath("$.to").value(60));
     }
 
+    @Test
+    public void withUserGetTransactionsShouldReturnErrorForInvalidPage() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("page", "string");
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath("$.*", hasSize(3)))
+                .andExpect(jsonPath("$.code").value(DECLINED_CODE))
+                .andExpect(jsonPath("$.message").value("Internal Server Error"))
+                .andExpect(jsonPath("$.status").value(DECLINED));
+    }
 
     @Test
     public void withUserGetTransactionsShouldReturnFromDateFilterList() throws Exception {
@@ -145,6 +159,23 @@ public class TransactionControllerTests {
                 .andExpect(jsonPath("$.data.*", hasSize(0)));
     }
 
+    @Test
+    public void withUserGetTransactionsShouldReturnErrorForInvalidDateFormat() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("fromDate", "string");
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.*", hasSize(3)))
+                .andExpect(jsonPath("$.code").value(DECLINED_CODE))
+                .andExpect(jsonPath("$.message").value("invalid date format"))
+                .andExpect(jsonPath("$.status").value(DECLINED));
+    }
 
     @Test
     public void withUserGetTransactionsShouldReturnFromAndEndDateFilterList() throws Exception {

@@ -14,7 +14,7 @@ public class TransactionListRequest {
 
     public TransactionListRequest(Map<String, Object> payload) throws InvalidDateFormatException {
         if(payload != null) {
-            this.setPage((int) payload.getOrDefault("page", DEFAULT_PAGE));
+            this.setPage(Integer.parseInt(payload.getOrDefault("page", DEFAULT_PAGE).toString()));
             this.setFromDate(DateUtil.parse(payload.get("fromDate")));
             this.setEndDate(DateUtil.parse(payload.get("endDate")));
         } else {
