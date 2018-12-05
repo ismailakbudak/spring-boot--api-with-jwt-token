@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TransactionControllerTests {
+public class TransactionControllerGetListTests {
 
     @Autowired
     private MockMvc mockMvc;

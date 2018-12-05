@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import report.service.v3.exception.TransactionNotFoundException;
-import report.service.v3.request.TransactionRequest;
+import report.service.v3.request.TransactionIdRequest;
 import report.service.v3.response.ClientResponse;
 import report.service.v3.service.TransactionService;
 
@@ -23,8 +23,8 @@ public class ClientController {
     @RequestMapping(value = "/client", method = RequestMethod.POST)
     public ClientResponse getClient(@RequestBody (required=false) Map<String, Object> payload) throws IOException, TransactionNotFoundException {
 
-        TransactionRequest transactionRequest = new TransactionRequest(payload);
-        return new ClientResponse(transactionService, transactionRequest);
+        TransactionIdRequest transactionIdRequest = new TransactionIdRequest(payload);
+        return new ClientResponse(transactionService, transactionIdRequest);
     }
 }
 

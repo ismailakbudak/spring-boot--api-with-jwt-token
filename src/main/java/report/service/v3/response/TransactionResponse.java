@@ -5,7 +5,7 @@ import report.service.v3.exception.TransactionNotFoundException;
 import report.service.v3.model.AgentInfo;
 import report.service.v3.model.CustomerInfo;
 import report.service.v3.model.Transaction;
-import report.service.v3.request.TransactionRequest;
+import report.service.v3.request.TransactionIdRequest;
 import report.service.v3.service.TransactionService;
 
 public class TransactionResponse {
@@ -15,8 +15,8 @@ public class TransactionResponse {
     private MerchantDTO merchant;
     private TransactionMerchantDTO transaction; // TransactionWithAgentDTO
 
-    public TransactionResponse(TransactionService transactionService, TransactionRequest transactionRequest) throws TransactionNotFoundException {
-        Transaction transactionModel = transactionService.findTransactionByTransactionId(transactionRequest.getTransactionId());
+    public TransactionResponse(TransactionService transactionService, TransactionIdRequest transactionIdRequest) throws TransactionNotFoundException {
+        Transaction transactionModel = transactionService.findTransactionByTransactionId(transactionIdRequest.getTransactionId());
 
         // Fx Transaction
         FxTransactionDTO fxTransaction = new FxTransactionDTO();

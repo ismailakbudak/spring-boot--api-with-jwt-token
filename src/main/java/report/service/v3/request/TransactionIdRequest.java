@@ -4,10 +4,10 @@ import report.service.v3.exception.ArgumentsRequiredException;
 
 import java.util.Map;
 
-public class TransactionRequest {
+public class TransactionIdRequest {
     private String transactionId;
 
-    public TransactionRequest(Map<String, Object> payload) throws ArgumentsRequiredException {
+    public TransactionIdRequest(Map<String, Object> payload) throws ArgumentsRequiredException {
         if(payload != null && payload.get("transactionId") != null) {
             this.setTransactionId(payload.get("transactionId").toString());
         }

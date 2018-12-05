@@ -4,14 +4,14 @@ import report.service.v3.dto.*;
 import report.service.v3.exception.TransactionNotFoundException;
 import report.service.v3.model.CustomerInfo;
 import report.service.v3.model.Transaction;
-import report.service.v3.request.TransactionRequest;
+import report.service.v3.request.TransactionIdRequest;
 import report.service.v3.service.TransactionService;
 
 public class ClientResponse {
     private CustomerInfoDTO customerInfo;
 
-    public ClientResponse(TransactionService transactionService, TransactionRequest transactionRequest) throws TransactionNotFoundException {
-        Transaction transactionModel = transactionService.findTransactionByTransactionId(transactionRequest.getTransactionId());
+    public ClientResponse(TransactionService transactionService, TransactionIdRequest transactionIdRequest) throws TransactionNotFoundException {
+        Transaction transactionModel = transactionService.findTransactionByTransactionId(transactionIdRequest.getTransactionId());
 
         // Customer Info
         CustomerInfo transactionCustomer = transactionModel.getCustomerInfo();
