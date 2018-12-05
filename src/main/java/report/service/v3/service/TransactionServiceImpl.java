@@ -12,6 +12,10 @@ import report.service.v3.model.Transaction;
 import report.service.v3.repository.TransactionRepository;
 import report.service.v3.request.TransactionListRequest;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,10 +40,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     static Specification<Transaction> beforeDate(Date date) {
-        if(date != null) {
-            return (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("createdAt"), date);
-        }
-        return (root, cq, cb) -> cb.and();
+        return (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("createdAt"), date);
+    }
+
+    static Specification<Transaction> fieldEql(String field, String fieldValue) {
+        return (root, cq, cb) -> cb.like(root.get(field), fieldValue);
+    }
+
+    static Specification<Transaction> relationFieldEql(String field, Integer fieldValue) {
+        return (root, cq, cb) -> cb.equal(root.get(field), fieldValue);
     }
 
     @Override
@@ -54,10 +63,9 @@ public class TransactionServiceImpl implements TransactionService {
         CustomerInfoShortDTO customerInfoDTO = null;
         AcquirerTransactionDTO acquirerTransactionDTO = null;
 
-        this.page = repository.findAll(
-            where(afterDate(request.getFromDate())).and(beforeDate(request.getEndDate())),
-            pageableRequest
-        );
+        Specification<Transaction> spec = handleSpecification(request);
+
+        this.page = repository.findAll(spec, pageableRequest);
 
         List<Transaction> transactions = this.page.getContent();
         for(Transaction transaction : transactions){
@@ -115,6 +123,33 @@ public class TransactionServiceImpl implements TransactionService {
             transactionListDTOS.add(transactionListDTO);
         }
         return transactionListDTOS;
+    }
+
+    private Specification<Transaction> handleSpecification(TransactionListRequest request) {
+        Specification<Transaction> spec = where(afterDate(request.getFromDate()));
+
+        if(request.getEndDate() != null)
+            spec = spec.and(beforeDate(request.getEndDate()));
+
+        if(request.getStatus() != null)
+            spec = spec.and(fieldEql("status", request.getStatus()));
+
+        if(request.getOperation() != null)
+            spec = spec.and(fieldEql("operation", request.getOperation()));
+
+        if(request.getErrorCode() != null)
+            spec = spec.and(fieldEql("code", request.getErrorCode()));
+
+        if(request.getMerchantId() != null)
+            spec = spec.and(relationFieldEql("merchantId", request.getMerchantId()));
+
+        if(request.getAcquirerId() != null)
+            spec = spec.and(relationFieldEql("acquirerTransactionId", request.getAcquirerId()));
+
+        if(request.getFilterField() != null)
+            spec = spec.and(fieldEql(request.getFilterField(), request.getFilterValue()));
+
+        return spec;
     }
 
     public Page getPage() {

@@ -2,7 +2,7 @@ package report.service.v3.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import report.service.v3.exception.InvalidDateFormatException;
+import report.service.v3.exception.InvalidFieldException;
 import report.service.v3.exception.TransactionNotFoundException;
 import report.service.v3.request.TransactionListRequest;
 import report.service.v3.request.TransactionIdRequest;
@@ -21,7 +21,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @RequestMapping(value = "/transaction/list", method = RequestMethod.POST)
-    public TransactionListResponse getList(@RequestBody (required=false) Map<String, Object> payload) throws IOException, InvalidDateFormatException {
+    public TransactionListResponse getList(@RequestBody (required=false) Map<String, Object> payload) throws IOException, InvalidFieldException {
 
         TransactionListRequest transactionListRequest = new TransactionListRequest(payload);
         return new TransactionListResponse(transactionService, transactionListRequest, "/api/v3/transaction/list");

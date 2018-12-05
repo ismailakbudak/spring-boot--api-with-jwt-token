@@ -192,4 +192,85 @@ public class TransactionControllerGetListTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.*", hasSize(28)));
     }
+
+    @Test
+    public void withUserGetTransactionsShouldReturnStatusFilterList() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("fromDate", "1950-07-18");
+            put("endDate", "2010-07-18");
+            put("status", "ERROR");
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.*", hasSize(9)));
+    }
+
+    @Test
+    public void withUserGetTransactionsShouldReturnOperationFilterList() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("fromDate", "1910-01-18");
+            put("endDate", "2090-07-18");
+            put("status", "ERROR");
+            put("operation", "DIRECT");
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.*", hasSize(11)));
+    }
+
+    @Test
+    public void withUserGetTransactionsShouldReturnCodeFilterList() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("errorCode", "22");
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.*", hasSize(0)));
+    }
+
+    @Test
+    public void withUserGetTransactionsShouldReturnFilterFieldFilterList() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("filterField", "Transaction​ ​UUID");
+            put("filterValue", "transaction_12");
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.*", hasSize(0)));
+    }
+
+    @Test
+    public void withUserGetTransactionsShouldReturnMerchantIdFilterList() throws Exception {
+        Map<String, Object> temp = new HashMap<String, Object>(){{
+            put("merchantId", 4);
+        }};
+
+        this.mockMvc.perform(post("/api/v3/transaction/list")
+                .header("Authorization", this.token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonMapperUtil.convert(temp)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.*", hasSize(0)));
+    }
 }

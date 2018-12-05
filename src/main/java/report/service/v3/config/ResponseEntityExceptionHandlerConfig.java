@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import report.service.v3.exception.ArgumentsRequiredException;
-import report.service.v3.exception.InvalidDateFormatException;
+import report.service.v3.exception.InvalidFieldException;
 import report.service.v3.response.ErrorResponse;
 
 import java.rmi.NotBoundException;
@@ -22,8 +22,8 @@ public class ResponseEntityExceptionHandlerConfig extends ResponseEntityExceptio
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(InvalidDateFormatException.class)
-    public final ResponseEntity<ErrorResponse> handleArgumentsRequiredException(InvalidDateFormatException ex, WebRequest request) {
+    @ExceptionHandler(InvalidFieldException.class)
+    public final ResponseEntity<ErrorResponse> handleArgumentsRequiredException(InvalidFieldException ex, WebRequest request) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

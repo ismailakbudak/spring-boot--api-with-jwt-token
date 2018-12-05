@@ -27,7 +27,7 @@ public class TransactionListResponse {
         if(currentPage > 1) {
             this.prevPageUrl = pageUrl + "?page=" + (currentPage - 1);
         }
-        this.from = ((currentPage - 1) * perPage) + 1;
+        this.from = ((currentPage - 1) * perPage) + ( data.size() > 0 ? 1 : 0);
         this.to = from - 1 + data.size();
     }
 
