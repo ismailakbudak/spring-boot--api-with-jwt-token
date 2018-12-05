@@ -2,6 +2,13 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
+classes/
+/build
+buildSrc/build
+/spring-*/build
+/src/asciidoc/build
+target/
+
 ### STS ###
 .apt_generated
 .classpath
@@ -17,6 +24,7 @@
 *.iml
 *.ipr
 /out/
+/classes/
 
 ### NetBeans ###
 /nbproject/private/

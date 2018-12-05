@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package hello;
+package report.service.v3.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static report.service.v3.constants.ResponseConstants.DECLINED;
+import static report.service.v3.security.SecurityConstants.AUTH_REQUIRED_MESSAGE;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import report.service.v3.security.TokenAuthenticationUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,17 +41,32 @@ public class GreetingControllerTests {
 
     @Test
     public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
-
         this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Hello, World!"));
     }
 
     @Test
     public void paramGreetingShouldReturnTailoredMessage() throws Exception {
-
         this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
     }
 
+    @Test
+    public void noUserGreetingAuthShouldReturnForbidden() throws Exception {
+        this.mockMvc.perform(get("/greeting_auth")).andDo(print()).andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.message").value(AUTH_REQUIRED_MESSAGE))
+                .andExpect(jsonPath("$.status").value(DECLINED));
+    }
+
+    @Test
+    public void withUserGreetingAuthShouldReturnDefaultMessage() throws Exception {
+        String token = TokenAuthenticationUtil.createToken("john");
+
+        this.mockMvc.perform(get("/greeting_auth").header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value("Hello, World!"));
+    }
 }

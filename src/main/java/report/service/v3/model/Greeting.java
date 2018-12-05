@@ -1,4 +1,4 @@
-package hello;
+package report.service.v3.model;
 
 public class Greeting {
 
