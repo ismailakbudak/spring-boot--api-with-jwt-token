@@ -1,5 +1,7 @@
 package report.service.v3.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class CustomerInfoDTO {
@@ -321,6 +323,7 @@ public class CustomerInfoDTO {
         this.shippingFax = shippingFax;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -329,6 +332,7 @@ public class CustomerInfoDTO {
         this.createdAt = createdAt;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getUpdatedAt() {
         return updatedAt;
     }

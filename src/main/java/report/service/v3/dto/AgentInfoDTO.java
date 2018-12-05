@@ -1,5 +1,7 @@
 package report.service.v3.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class AgentInfoDTO {
@@ -51,6 +53,7 @@ public class AgentInfoDTO {
         this.merchantUserAgent = merchantUserAgent;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getCreatedAt() {
         return createdAt;
     }

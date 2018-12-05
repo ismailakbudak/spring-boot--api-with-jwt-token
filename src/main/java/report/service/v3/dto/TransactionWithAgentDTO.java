@@ -4,23 +4,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class TransactionDTO {
+public class TransactionWithAgentDTO {
     private Long id;
     private String transactionId;
     private String referenceNo;
     private String status;
     private String channel;
     private String code;
-    private Long amount;
-    private String currency;
     private String customData;
     private String chainId;
-    private String returnUrl;
-    private String type;
     private String operation;
     private String message;
-    private Boolean refundable;
-    private Integer ipnTransactionId;
     private Integer fxTransactionId;
     private Integer merchantId;
     private Integer customerInfoId;
@@ -28,7 +22,7 @@ public class TransactionDTO {
     private Integer acquirerTransactionId;
     private Date createdAt;
     private Date updatedAt;
-    private Date deletedAt;
+    private AgentInfoDTO agentInfo;
 
     public Long getId() {
         return id;
@@ -78,22 +72,6 @@ public class TransactionDTO {
         this.code = code;
     }
 
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     public String getCustomData() {
         return customData;
     }
@@ -110,22 +88,6 @@ public class TransactionDTO {
         this.chainId = chainId;
     }
 
-    public String getReturnUrl() {
-        return returnUrl;
-    }
-
-    public void setReturnUrl(String returnUrl) {
-        this.returnUrl = returnUrl;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getOperation() {
         return operation;
     }
@@ -140,22 +102,6 @@ public class TransactionDTO {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public Boolean getRefundable() {
-        return refundable;
-    }
-
-    public void setRefundable(Boolean refundable) {
-        this.refundable = refundable;
-    }
-
-    public Integer getIpnTransactionId() {
-        return ipnTransactionId;
-    }
-
-    public void setIpnTransactionId(Integer ipnTransactionId) {
-        this.ipnTransactionId = ipnTransactionId;
     }
 
     public Integer getFxTransactionId() {
@@ -216,11 +162,11 @@ public class TransactionDTO {
         this.updatedAt = updatedAt;
     }
 
-    public Date getDeletedAt() {
-        return deletedAt;
+    public AgentInfoDTO getAgentInfo() {
+        return agentInfo;
     }
 
-    public void setDeletedAt(Date deletedAt) {
-        this.deletedAt = deletedAt;
+    public void setAgentInfo(AgentInfoDTO agentInfo) {
+        this.agentInfo = agentInfo;
     }
 }

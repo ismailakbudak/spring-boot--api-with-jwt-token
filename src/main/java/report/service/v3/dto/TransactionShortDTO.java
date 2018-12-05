@@ -1,5 +1,7 @@
 package report.service.v3.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class TransactionShortDTO {
@@ -59,6 +61,7 @@ public class TransactionShortDTO {
         this.message = message;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getCreatedAt() {
         return createdAt;
     }

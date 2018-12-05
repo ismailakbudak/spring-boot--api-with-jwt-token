@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import report.service.v3.dto.*;
+import report.service.v3.exception.TransactionNotFoundException;
 import report.service.v3.model.Transaction;
 import report.service.v3.repository.TransactionRepository;
 import report.service.v3.request.TransactionListRequest;
@@ -14,6 +15,7 @@ import report.service.v3.request.TransactionListRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -77,7 +79,6 @@ public class TransactionServiceImpl implements TransactionService {
             transactionDTO.setCreatedAt(transaction.getCreatedAt());
 
             // Fx Transaction
-            fxTransactionDTO.setId(transaction.getFxTransaction().getId());
             fxTransactionDTO.setOriginalAmount(transaction.getFxTransaction().getOriginalAmount());
             fxTransactionDTO.setOriginalCurrency(transaction.getFxTransaction().getOriginalCurrency());
 
@@ -118,5 +119,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     public Page getPage() {
         return page;
+    }
+
+    @Override
+    public Transaction findTransactionByTransactionId(String transactionId) throws TransactionNotFoundException {
+        Optional<Transaction> optionalTransaction = this.repository.findByTransactionId(transactionId);
+
+        if(!optionalTransaction.isPresent()) {
+            throw new TransactionNotFoundException();
+        }
+
+        return optionalTransaction.get();
     }
 }
